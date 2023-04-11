@@ -1,6 +1,7 @@
 // Stateful, Column, EdgeInsets, Form, GlobalKey, Validator
 // ElevatedButton,
 import 'package:flutter/material.dart';
+import '../mixins/validation_mixin.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> with ValidationMixin {
   final formKey = GlobalKey<FormState>();
 
   String email = '';
@@ -42,20 +43,13 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'Email Address',
         hintText: 'you@example.com',
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter some text';
-        }
-        if (!value.contains('@')) {
-          //  return null if void otherwise (string with the error.message) if invalid
-          return 'Please enter a valid email';
-        }
-      },
+      validator: validateEmail,
       onSaved: (value) {
         email = value!;
       },
     );
   }
+
 
   Widget passwordField() {
     return TextFormField(
@@ -64,19 +58,14 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'Enter Password',
         hintText: 'Password',
       ),
-      validator: (value) {
-        if (value == null) {
-          return "Please enter a password";
-        }
-        if (value.length < 4) {
-          return 'Password must be at least 4 characters';
-        }
-      },
+      validator: validatePassword,
       onSaved: (value) {
         password = value!;
       },
     );
   }
+
+ 
 
   Widget submitButton() {
     return ElevatedButton(
